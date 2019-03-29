@@ -1066,7 +1066,11 @@ Ref<Shape2D> Spine::get_bounding_box(const String &p_slot_name, const String &p_
 	Vector<Vector2> points;
 	points.resize(info->verticesCount / 2);
 	for (int idx = 0; idx < info->verticesCount / 2; idx++)
+#if (VERSION_MAJOR == 3 && VERSION_MINOR >= 1)
 		points.write[idx] = Vector2(info->vertices[idx * 2], -info->vertices[idx * 2 + 1]);
+#else
+		points[idx] = Vector2(info->vertices[idx * 2], -info->vertices[idx * 2 + 1]);
+#endif
 
 	ConvexPolygonShape2D *shape = memnew(ConvexPolygonShape2D);
 	shape->set_points(points);
@@ -1338,7 +1342,7 @@ Spine::Spine()
 	autoplay = "";
 	animation_process_mode = ANIMATION_PROCESS_IDLE;
 	processing = false;
-	active = false;
+	active = true;
 	playing = false;
 	forward = true;
 	process_delta = 0;
